@@ -26,3 +26,8 @@ steps:
   - '5000'
   - '--allow-unauthenticated'
 timeout: '1600s'
+
+
+# NOWA SEKCJA DODANA, ABY ROZWIĄZAĆ BŁĄD LOGOWANIA
+options:
+  logging: CLOUD_LOGGING_ONLY
