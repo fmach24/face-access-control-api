@@ -1,0 +1,28 @@
+# Nazwa pliku: cloudbuild.yaml
+steps:
+# 1. BUDOWANIE OBRAZU I PUSH DO GCR/Artifact Registry
+- name: 'gcr.io/cloud-builders/docker'
+  id: Build
+  args:
+  - 'build'
+  - '-t'
+  - 'gcr.io/$PROJECT_ID/access-api:$COMMIT_SHA'  # $COMMIT_SHA to unikalny tag z commita GitHub
+  - '.'
+
+# 2. WDROŻENIE NA CLOUD RUN
+- name: 'gcr.io/cloud-builders/gcloud'
+  id: Deploy
+  args:
+  - 'run'
+  - 'deploy'
+  - 'access-api' # Nazwa Twojej usługi Cloud Run
+  - '--image'
+  - 'gcr.io/$PROJECT_ID/access-api:$COMMIT_SHA'
+  - '--region'
+  - 'us-central2' # Ustaw swój region!
+  - '--platform'
+  - 'managed'
+  - '--port'
+  - '5000'
+  - '--allow-unauthenticated'
+timeout: '1600s'
